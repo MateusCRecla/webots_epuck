@@ -34,6 +34,8 @@
 
 typedef struct {
 
+WbDeviceTag left_motor;
+WbDeviceTag right_motor;  
 WbFieldRef position;
 WbFieldRef rotation;
 WbDeviceTag ps[8];
@@ -47,12 +49,12 @@ tRobot_specs robot_int() {       //Função criada usando o Struct tRobot_specs
 tRobot_specs specs;
 
 wb_robot_init();
-  WbDeviceTag left_motor = wb_robot_get_device("left wheel motor");
-  WbDeviceTag right_motor = wb_robot_get_device("right wheel motor");
-  wb_motor_set_position(left_motor, INFINITY);
-  wb_motor_set_position(right_motor, INFINITY);
-  wb_motor_set_velocity(left_motor, 0.1 * MAX_SPEED);
-  wb_motor_set_velocity(right_motor, 0.1 * MAX_SPEED);
+  specs.left_motor = wb_robot_get_device("left wheel motor");
+  specs.right_motor = wb_robot_get_device("right wheel motor");
+  wb_motor_set_position(specs.left_motor, INFINITY);
+  wb_motor_set_position(specs.right_motor, INFINITY);
+  wb_motor_set_velocity(specs.left_motor, 0.1 * MAX_SPEED);
+  wb_motor_set_velocity(specs.right_motor, 0.1 * MAX_SPEED);
   WbDeviceTag left_encoder = wb_robot_get_device("left wheel sensor");
   WbDeviceTag right_encoder = wb_robot_get_device("right wheel sensor");
   wb_position_sensor_enable(left_encoder, TIME_STEP);
@@ -62,7 +64,7 @@ wb_robot_init();
   for(int i = 0; i < 8; i++){
     sprintf(ps_id, "ps%d", i);
     specs.ps[i] = wb_robot_get_device(ps_id);
-    wb_distance_sensor_enable(ps[i], TIME_STEP);
+    wb_distance_sensor_enable(specs.ps[i], TIME_STEP);
   }
   WbNodeRef robot_node = wb_supervisor_node_get_from_def("EPUCK");
   if (robot_node == NULL) {
@@ -133,13 +135,13 @@ int main(int argc, char **argv) {
 
     if ( detect_obstacle_ahead(dist) )
     {
-      wb_motor_set_velocity(left_motor, 0.2 * MAX_SPEED);
-      wb_motor_set_velocity(right_motor, -0.2 * MAX_SPEED);
+      wb_motor_set_velocity(config.left_motor, 0.2 * MAX_SPEED);
+      wb_motor_set_velocity(config.right_motor, -0.2 * MAX_SPEED);
     }
     if ( !detect_obstacle_ahead(dist) )
     {
-      wb_motor_set_velocity(left_motor, 0.5 * MAX_SPEED);
-      wb_motor_set_velocity(right_motor, 0.5 * MAX_SPEED);
+      wb_motor_set_velocity(config.left_motor, 0.5 * MAX_SPEED);
+      wb_motor_set_velocity(config.right_motor, 0.5 * MAX_SPEED);
     }
   }
    
