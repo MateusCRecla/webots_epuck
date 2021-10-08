@@ -43,7 +43,7 @@ WbDeviceTag ps[8];
 }tRobot_specs;       //Struct criada
 
 
-tRobot_specs robot_int() {       //Função criada usando o Struct tRobot_specs
+tRobot_specs robot_init() {       //Função criada usando o Struct tRobot_specs
 
 
 tRobot_specs specs;
